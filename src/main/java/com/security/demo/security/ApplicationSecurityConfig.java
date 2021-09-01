@@ -11,10 +11,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Basic Auth
+     * 
+     * using antMatchers to wide list permission withou auth
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+            .antMatchers("/", "index", "/css/", "/js/*")
+            .permitAll()
             .anyRequest()
             .authenticated()
             .and()
