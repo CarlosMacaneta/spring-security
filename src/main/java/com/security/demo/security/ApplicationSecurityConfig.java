@@ -35,8 +35,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "index", "/css/", "/js/*")
-            .permitAll()
+            .antMatchers("/", "index", "/css/", "/js/*").permitAll()
+            .antMatchers("/api/**").hasRole(Role.STUDENT.name())
             .anyRequest()
             .authenticated()
             .and()
@@ -53,10 +53,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails user = User.builder()
             .username("annasmith")
             .password(passwordEncoder.encode("password"))
-            .roles("STUDENT")
+            .roles(Role.STUDENT.name())
             .build();
         
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin =User.builder()
+            .username("linda")
+            .password(passwordEncoder.encode("password123"))
+            .roles(Role.ADMIN.name())
+            .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
     }
     
 }
